@@ -81,6 +81,17 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+        ChessPiece me = board.getPiece(myPosition);
+        PieceType type = me.getPieceType();
+
+        if (type == PieceType.ROOK) {
+            int[][] myDirs = new int[][] {
+                {1,0}, {-1,0}, {0,1}, {0,-1}
+            };
+
+            return basicMoves(board, myPosition, myDirs, true);
+        }
+        
         return null;
     }
 
