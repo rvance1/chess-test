@@ -98,6 +98,15 @@ public class ChessPiece {
 
             return basicMoves(board, myPosition, myDirs, true);
         }
+        if (type == PieceType.QUEEN) {
+            int[][] myDirs = new int[][] {
+                {1,1}, {-1,1}, {1,-1}, {-1,-1},
+                {1,0}, {-1,0}, {0,1}, {0,-1}
+            };
+
+            return basicMoves(board, myPosition, myDirs, true);
+        }
+        
         
         return null;
     }
