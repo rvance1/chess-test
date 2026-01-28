@@ -1,6 +1,9 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a single chess piece
@@ -10,7 +13,38 @@ import java.util.Collection;
  */
 public class ChessPiece {
 
+    private ChessGame.TeamColor color;
+    private ChessPiece.PieceType type;
+    
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
+        this.color = pieceColor;
+        this.type = type;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 59 * hash + Objects.hashCode(this.color);
+        hash = 59 * hash + Objects.hashCode(this.type);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ChessPiece other = (ChessPiece) obj;
+        if (this.color != other.color) {
+            return false;
+        }
+        return this.type == other.type;
     }
 
     /**
@@ -29,14 +63,14 @@ public class ChessPiece {
      * @return Which team this chess piece belongs to
      */
     public ChessGame.TeamColor getTeamColor() {
-        throw new RuntimeException("Not implemented");
+        return this.color;
     }
 
     /**
      * @return which type of chess piece this piece is
      */
     public PieceType getPieceType() {
-        throw new RuntimeException("Not implemented");
+        return this.type;
     }
 
     /**
@@ -47,6 +81,68 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        throw new RuntimeException("Not implemented");
+        return null;
+    }
+
+    private Collection<ChessMove> basicMoves(ChessBoard board, ChessPosition myPosition, int[][] myDirs, boolean isRepeatable) {
+        // 0- row
+        // 1- col
+        // 2- capture info (0: cant capture, 1: needs capture) PAWN ONLY
+        // 3- move cap PAWN ONLY
+
+
+        List<ChessMove> moves = new ArrayList();
+        ChessPiece me = board.getPiece(myPosition);
+
+        for (int[] d: myDirs) {
+
+            int row = myPosition.getRow() + d[0];
+            int col = myPosition.getColumn() + d[1];
+
+            int i = 1;
+            while (isOnBoard(row,col)) {
+
+                ChessPosition target = new ChessPosition(row, col);
+                ChessPiece squatter = board.getPiece(target);
+
+                if (d.length == 2) {
+                    //default
+                    if (squatter == null) {
+                        moves.add(new ChessMove(myPosition, target, null));
+                    } else {
+                        if (squatter.getTeamColor() != me.getTeamColor()) {
+                            moves.add(new ChessMove(myPosition, target, null));
+                        }
+                        break;
+                    }
+                } else {
+                    //pawn
+                    if (squatter == null) {
+                        if (d[2] != 1) {
+                            moves.add(new ChessMove(myPosition, target, null));
+                        }
+                    } else {
+                        if (squatter.getTeamColor() != me.getTeamColor()) {
+                            if (d[2] != 0) {
+                                moves.add(new ChessMove(myPosition, target, null));
+                            }
+                        }
+                        break;
+                    }
+                    if (i >= d[3]) {break;}
+                }
+
+                if (!isRepeatable) {break;}
+                row += d[0];
+                col += d[1];
+                i++;
+            }
+
+        }
+        return moves;
+    }
+
+    private boolean isOnBoard(int row, int col) {
+        return row <= 8 && row >=1 && col <= 8 && col >=1;
     }
 }
