@@ -114,6 +114,14 @@ public class ChessPiece {
 
             return basicMoves(board, myPosition, myDirs, false);
         }
+        if (type == PieceType.KNIGHT) {
+            int[][] myDirs = new int[][] {
+                {2,1}, {2,-1}, {-2,1}, {-2,-1},
+                {1,2}, {1,-2}, {-1,2}, {-1,-2}
+            };
+
+            return basicMoves(board, myPosition, myDirs, false);
+        }
         
         
         return null;
