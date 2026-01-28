@@ -91,6 +91,13 @@ public class ChessPiece {
 
             return basicMoves(board, myPosition, myDirs, true);
         }
+        if (type == PieceType.BISHOP) {
+            int[][] myDirs = new int[][] {
+                {1,1}, {-1,1}, {1,-1}, {-1,-1}
+            };
+
+            return basicMoves(board, myPosition, myDirs, true);
+        }
         
         return null;
     }
