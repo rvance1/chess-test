@@ -122,6 +122,47 @@ public class ChessPiece {
 
             return basicMoves(board, myPosition, myDirs, false);
         }
+        if (type == PieceType.PAWN) {
+
+            PieceType[] promotions = new PieceType[] {
+                PieceType.BISHOP,
+                PieceType.KNIGHT,
+                PieceType.QUEEN,
+                PieceType.ROOK,
+            };
+
+            List<ChessMove> moves = new ArrayList<>();
+
+            
+            int dir = me.getTeamColor() == ChessGame.TeamColor.WHITE ? 1 : -1;
+
+            int startingRow = dir == 1 ? 2 : 7;
+            int promotionRow = dir == 1 ? 8 : 1;
+
+            int moveCap = startingRow == myPosition.getRow() ? 2 : 1;
+
+            
+            
+            int[][] myDirs = new int[][] {
+                {dir, 1, 1, 1}, {dir, 0, 0, moveCap}, {dir, -1, 1, 1}
+            };
+
+            Collection<ChessMove> baseMoves = basicMoves(board, myPosition, myDirs, true);
+
+
+            for (ChessMove move: baseMoves) {
+                if (move.getEndPosition().getRow() == promotionRow) {
+                    
+                
+                
+                } else {
+                    moves.add(move);
+                }
+            }
+            
+            return baseMoves;
+
+        }
         
         
         return null;
