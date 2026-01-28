@@ -152,15 +152,19 @@ public class ChessPiece {
 
             for (ChessMove move: baseMoves) {
                 if (move.getEndPosition().getRow() == promotionRow) {
-                    
-                
+
+                for (PieceType proType: promotions) {
+                    moves.add(
+                        new ChessMove(move.getStartPosition(), move.getEndPosition(), proType)
+                    );
+                }
                 
                 } else {
                     moves.add(move);
                 }
             }
             
-            return baseMoves;
+            return moves;
 
         }
         
